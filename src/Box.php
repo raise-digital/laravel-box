@@ -17,7 +17,7 @@ class Box
         return new Files();
     }
 
-    public function folders(): object 
+    public function folders(): object
     {
         return new Folders();
     }
@@ -39,7 +39,7 @@ class Box
     }
 
     public function connect(): redirect
-    {      
+    {
         if (! request()->has('code')) {
             //redirect to box
             $url = config('box.urlAuthorize') . '?' . http_build_query([
@@ -68,7 +68,7 @@ class Box
 
     public function getAccessToken()
     {
-        $token = BoxToken::where('user_id', auth()->id())->first();
+        $token = BoxToken::query()->where('user_id', auth()->id())->first();
 
         // Check if tokens exist otherwise run the oauth request
         if (! isset($token->access_token)) {
@@ -98,8 +98,8 @@ class Box
             $this->storeToken($accessToken->access_token, $accessToken->refresh_token, $accessToken->expires_in);
 
             return $accessToken->access_token;
-        } 
-        
+        }
+
         // Token is still valid, just return it
         return $token->access_token;
     }
