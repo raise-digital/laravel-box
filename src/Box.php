@@ -107,12 +107,17 @@ class Box
     protected function storeToken($access_token, $refresh_token, $expires): void
     {
         //create a new record or if the user id exists update record
-        BoxToken::updateOrCreate(['user_id' => auth()->id()], [
-            'user_id'       => auth()->id(),
+        $token = BoxToken::first();
+        if (empty($token)) {
+            $token = new BoxToken();
+        }
+        $token->fill([
+            'user_id'       => null,
             'access_token'  => $access_token,
             'expires'       => time() + $expires,
             'refresh_token' => $refresh_token
         ]);
+        $token->save();
     }
 
     protected function guzzle($type, $request, $data = [])
