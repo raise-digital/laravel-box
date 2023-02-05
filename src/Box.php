@@ -68,7 +68,7 @@ class Box
 
     public function getAccessToken()
     {
-        $token = BoxToken::query()->where('user_id', auth()->id())->first();
+        $token = BoxToken::first();
 
         // Check if tokens exist otherwise run the oauth request
         if (! isset($token->access_token)) {
@@ -110,7 +110,7 @@ class Box
         BoxToken::updateOrCreate(['user_id' => auth()->id()], [
             'user_id'       => auth()->id(),
             'access_token'  => $access_token,
-            'expires'       => $expires,
+            'expires'       => time() + $expires,
             'refresh_token' => $refresh_token
         ]);
     }
